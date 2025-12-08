@@ -6,8 +6,8 @@ import com.aivle._th_miniProject.user.User;
 import com.aivle._th_miniProject.user.UserRepository;
 import com.aivle._th_miniProject.user.jwt.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +45,7 @@ public class BookController {
 
         try {
             BookCreateResponse response = bookService.createBook(request, userId);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
         } catch (IllegalArgumentException e) {
             //메시지로 404 / 400 구분

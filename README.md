@@ -291,7 +291,8 @@ jwt:
 
 ### 📎 ERD
 
-<img width="1420" height="1402" alt="MiniProject4" src="https://github.com/user-attachments/assets/f2c9f91d-d33e-4092-9d2c-8a919daf6f18" />
+<img width="1310" height="1080" alt="MiniProject4" src="https://github.com/user-attachments/assets/ea6594b0-d120-42eb-9dcd-f48e6ffb6bbc" />
+
 
 <br>
 

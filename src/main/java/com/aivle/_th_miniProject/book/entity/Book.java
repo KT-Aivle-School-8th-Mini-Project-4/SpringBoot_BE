@@ -42,8 +42,8 @@ public class Book {
     @Column(nullable = false)
     private Integer stock;
 
-    @Column(precision = 12, scale = 2)
-    private BigDecimal price;
+    @Column(nullable = false)
+    private Integer price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

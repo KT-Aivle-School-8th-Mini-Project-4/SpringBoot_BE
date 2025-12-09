@@ -21,7 +21,7 @@ public class BookCreateResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer stock;
-    private BigDecimal price;
+    private Integer price;
 
     public static BookCreateResponse from(Book book) {
         return BookCreateResponse.builder()
@@ -37,5 +37,4 @@ public class BookCreateResponse {
                 .updatedAt(book.getUpdatedAt())
                 .build();
     }
-
 }

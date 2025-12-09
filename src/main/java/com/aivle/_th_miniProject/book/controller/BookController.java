@@ -60,7 +60,7 @@ public class BookController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<?> getEntireBooks()
     {
         try {

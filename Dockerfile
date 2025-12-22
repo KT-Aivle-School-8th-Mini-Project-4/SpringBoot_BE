@@ -1,4 +1,4 @@
-FROM public.ecr.aws/amazoncorretto/amazoncorretto:17-alpine
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:17
 
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar

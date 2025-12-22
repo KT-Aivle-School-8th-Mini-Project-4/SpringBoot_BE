@@ -2,7 +2,9 @@ version: 0.2
 
 env:
   variables:
-    JWT_SECRET: codebuild-test-secret-32-characters-long
+    AWS_REGION: us-east-1
+    ECR_REPO: a081004-repo
+    ACCOUNT_ID: 416225317325
 
 phases:
   install:
@@ -16,17 +18,20 @@ phases:
     commands:
       - echo "▶ Pre-build phase started"
       - ./gradlew clean build -x test
+      - aws --version
+      - aws ecr get-login-password --region $AWS_REGION |
+        docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
   build:
     commands:
       - echo "▶ Docker build started"
-      - docker build -t springboot-app .
+      - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
+      - docker build -t $ECR_REPO:$IMAGE_TAG .
+      - docker tag $ECR_REPO:$IMAGE_TAG $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+      - docker tag $ECR_REPO:$IMAGE_TAG $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
 
   post_build:
     commands:
       - echo "▶ Build completed successfully"
-
-
-artifacts:
-  files:
-    - '**/*'
+      - docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+      - docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest

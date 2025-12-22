@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:17-alpine
 
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} app.jar

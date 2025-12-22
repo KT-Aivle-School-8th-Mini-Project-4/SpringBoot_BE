@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: a081004-app
+spec:
+  type: ClusterIP
+  selector:
+    app: a081004-app
+  ports:
+    - port: 80
+      targetPort: 8080

@@ -1,0 +1,15 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1
+    EKS_CLUSTER_NAME: AIVLE-Class1-Group1-Cluster
+
+phases:
+  post_build:
+    commands:
+      - echo "▶ Update kubeconfig"
+      - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
+
+      - echo "▶ Deploy to EKS"
+      - kubectl apply -f k8s/

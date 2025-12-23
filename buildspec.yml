@@ -7,7 +7,6 @@ env:
     ECR_REPO: a081004-repo
     EKS_CLUSTER_NAME: AIVLE-Class1-Group1-Cluster
     CONTAINER_NAME: a081004-app
-    DEPLOYMENT_NAME: a081004-app
 
 phases:
   install:
@@ -41,12 +40,3 @@ phases:
       - docker tag $IMAGE_URI ${ACCOUNT_ID}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
       - docker push $IMAGE_URI
       - docker push ${ACCOUNT_ID}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
-
-
-  post_build:
-    commands:
-      - echo "▶ Update kubeconfig"
-      - aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
-
-      - echo "▶ Deploy to EKS"
-      - kubectl apply -f k8s/

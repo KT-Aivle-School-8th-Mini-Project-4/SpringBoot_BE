@@ -1,0 +1,46 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1
+    ACCOUNT_ID: 416225317325
+    ECR_REPO: a081004-repo
+    EKS_CLUSTER_NAME: AIVLE-Class1-Group1-Cluster
+    CONTAINER_NAME: a081004-app
+
+phases:
+  install:
+    commands:
+      - echo "▶ Install phase"
+      - chmod +x ./gradlew
+      - aws --version
+
+      - echo "▶ Install kubectl"
+      - curl -LO https://dl.k8s.io/release/v1.34.2/bin/linux/amd64/kubectl
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/kubectl
+      - kubectl version --client
+
+  pre_build:
+    commands:
+      - echo "▶ Build Spring Boot JAR"
+      - ./gradlew clean build -x test
+
+      - echo "▶ Login to ECR"
+      - aws ecr get-login-password --region $AWS_REGION |
+        docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_URI=${ACCOUNT_ID}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:$IMAGE_TAG
+
+  build:
+    commands:
+      - echo "▶ Docker build & Push"
+      - docker build -t $IMAGE_URI .
+      - docker tag $IMAGE_URI ${ACCOUNT_ID}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
+      - docker push $IMAGE_URI
+      - docker push ${ACCOUNT_ID}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO:latest
+
+artifacts:
+  files:
+    - "**/*"
